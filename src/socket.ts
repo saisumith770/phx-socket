@@ -15,7 +15,7 @@ export class Socket {
     private _ready: boolean = false
     private _pending_messages: MessageType<any>[] = []
     public topics: Channel[] = [] //will be used to populate data in the global state manager
-    private _events:EventCollection
+    private _events:EventCollection = new EventCollection()
 
     constructor(url: string) {
         this._socket = new WebSocket(url)
@@ -27,7 +27,6 @@ export class Socket {
             })
             this._pending_messages = []
         })
-        this._events = new EventCollection()
     }
 
     /**

@@ -1,4 +1,4 @@
-# @phx/socket
+# phx-socket
 ## Introduction
 This is a websocket library for typescript built to interact with the phoenix websocket server. This is because phoenix has an abstraction around the general http socket layer. This library will simplify the procedure.
 

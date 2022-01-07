@@ -105,15 +105,14 @@ export class Socket {
         }))
     }
 
-    //State is not properly written
     public get state(): SocketState {
         switch (this._socket.readyState){
             case this._socket.CLOSED: return SocketState.CLOSED
             case this._socket.CLOSING: return SocketState.CLOSING
             case this._socket.CONNECTING: return SocketState.CONNECTING
             case this._socket.OPEN: return SocketState.OPEN
+            default: return SocketState.UNKNOWN
         }
-        return SocketState.UNKNOWN
     }
 
     public close(){

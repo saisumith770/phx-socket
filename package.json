@@ -1,5 +1,5 @@
 {
-  "name": "@phx/socket",
+  "name": "phx-socket",
   "version": "1.0.1",
   "description": "a type safe library to communicate to the websocket built with elixir phoenix.",
   "main": "dist/index.js",

@@ -9,6 +9,24 @@ import {
 
 import {e7} from './uuid'
 
+/**
+ * 
+ * @description
+ * This class is what you should import into your app. It has access to all the features of this library.
+ * @example 
+ * const inst = new Socket("wss://localhost:4000/socket/websocket")
+ * inst.on("phx_reply",(_,__) => {
+ *  console.log("got a new reply")
+ * })
+ * inst.send({
+ *  topic:"room",
+ *  event:"phx_join",
+ *  payload:{
+ *      account:"sai sumith",
+ *      avatar:"https://avatar.com/avatar"
+ *  }
+ * }) 
+ */
 export class Socket {
     private _socket: WebSocket
     private _socket_id: string
@@ -34,6 +52,8 @@ export class Socket {
      * @param topic 
      * @description
      * subscribes to a phoenix channel
+     * @example
+     * inst.subscribe("room")
      */
     public subscribe(topic: string) {
         this.send({
@@ -54,6 +74,8 @@ export class Socket {
      * @param topic 
      * @description
      * unsubscribes from a phoenix channel
+     * @example
+     * inst.unsubscribe("room")
      */
     public unsubscribe(topic: string) {
         this.send({
@@ -64,6 +86,20 @@ export class Socket {
         if (topic in this.topics) this.topics = this.topics.filter(ch => ch.topic !== topic)
     }
 
+    /**
+     * 
+     * @param event 
+     * @param callback 
+     * @description
+     * this method will set an event listener associated to the event. You can also set multiple callbacks to the same event.
+     * @example
+     * inst.on('msg',(_, __) => {
+     *  console.log("received msg")
+     * })
+     * inst.on('msg',(_, __) => {
+     *  console.log("received msg from server")
+     * })
+     */
     public on(event: SocketEvent | string, callback: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void) {
         this._events.addEventToListen(event,callback)
         const eventsToListen = this._events.eventsArray
@@ -86,6 +122,17 @@ export class Socket {
         }
     }
 
+    /**
+     * 
+     * @param event 
+     * @param callback 
+     * @description
+     * this method will remove the event listerner. Make sure you provide the callback in order to remove
+     * that specific listener or else all listeners for that event will be removed. also make sure you store
+     * your callback in a variable and pass that variable because redeclaration will create new memory location and not work properly.
+     * @example
+     * inst.off('msg')
+     */
     public off(event:SocketEvent | string, callback?: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void){
         if(callback) this._events.removeEvent(event,callback)
         else this._events.removeEvent(event)
@@ -96,6 +143,14 @@ export class Socket {
      * @param message 
      * @description
      * this function will send a socket message by populating it with required data
+     * @example
+     * inst.send({
+     *  topic:"room",
+     *  event:"shout",
+     *  payload:{
+     *      message:"hey boi's"
+     *  }
+     * })
      */
     public send<PayloadType extends {}>(message: MessageType<PayloadType>) {
         if(!this._ready) {
@@ -110,6 +165,14 @@ export class Socket {
         }))
     }
 
+    /**
+     * @description
+     * this getter shows the state of the current socket connection.
+     * You can use the enum provided by our types file in order to get the enums
+     * we use for maintaing state.
+     * @example
+     * console.log(inst.state === SocketState.CLOSED)
+     */
     public get state(): SocketState {
         switch (this._socket.readyState){
             case this._socket.CLOSED: return SocketState.CLOSED
@@ -120,6 +183,12 @@ export class Socket {
         }
     }
 
+    /**
+     * @description
+     * this method will close the socket connection.
+     * @example 
+     * inst.close()
+     */
     public close(){
         this._socket.close()
     }

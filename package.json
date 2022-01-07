@@ -1,11 +1,11 @@
 {
   "name": "phx-socket",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a type safe library to communicate to the websocket built with elixir phoenix.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saisumith770/-phx-socket.git"
+    "url": "https://github.com/saisumith770/phx-socket"
   },
   "keywords": [
     "phoenix",
@@ -15,7 +15,7 @@
   "author": "Sai Sumith <saisumith812@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/saisumith770/-phx-socket/issues"
+    "url": "https://github.com/saisumith770/phx-socket/issues"
   },
-  "homepage": "https://github.com/saisumith770/-phx-socket#readme"
+  "homepage": "https://github.com/saisumith770/phx-socket/blob/master/README.md"
 }

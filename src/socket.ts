@@ -86,6 +86,11 @@ export class Socket {
         }
     }
 
+    public off(event:SocketEvent | string, callback?: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void){
+        if(callback) this._events.removeEvent(event,callback)
+        else this._events.removeEvent(event)
+    }
+
     /**
      * 
      * @param message 

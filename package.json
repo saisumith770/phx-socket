@@ -1,12 +1,8 @@
 {
   "name": "@phx/socket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a type safe library to communicate to the websocket built with elixir phoenix.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm publish --access=public"
-  },
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/saisumith770/-phx-socket.git"
@@ -21,11 +17,5 @@
   "bugs": {
     "url": "https://github.com/saisumith770/-phx-socket/issues"
   },
-  "homepage": "https://github.com/saisumith770/-phx-socket#readme",
-  "dependencies": {
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "@types/uuid": "^8.3.3"
-  }
+  "homepage": "https://github.com/saisumith770/-phx-socket#readme"
 }

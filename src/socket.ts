@@ -7,7 +7,7 @@ import {
     SocketState
 } from './internal'
 
-import { v4 } from 'uuid'
+import {e7} from './uuid'
 
 export class Socket {
     private _socket: WebSocket
@@ -19,7 +19,7 @@ export class Socket {
 
     constructor(url: string) {
         this._socket = new WebSocket(url)
-        this._socket_id = "socket:" + v4()
+        this._socket_id = "socket:" + e7()
         this.on(SocketEvent.OPEN, (_,__) => {
             this._ready = true
             this._pending_messages.forEach((message) => {
@@ -97,7 +97,7 @@ export class Socket {
             this._pending_messages.push(message)
             return;
         }
-        const msg_id = "message:" + v4()
+        const msg_id = "message:" + e7()
         this._socket.send(JSON.stringify({
             ...message,
             ref: msg_id,

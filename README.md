@@ -2,6 +2,11 @@
 ## Introduction
 This is a websocket library for typescript built to interact with the phoenix websocket server. This is because phoenix has an abstraction around the general http socket layer. This library will simplify the procedure.
 
+## Installation
+```bash
+  npm i phx-socket
+```
+
 ## Objects
 ### Socket
 This is a class that would initiate the connection. Although in most of your programs this is the only class that you will be importing.

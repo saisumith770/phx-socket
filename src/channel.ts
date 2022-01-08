@@ -58,11 +58,11 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      * @description
      * this method will set an event listener associated to the event. You can also set multiple callbacks to the same event.
      * @example
-     * channel.on('msg',(_, __) => {
-     *  console.log("received msg")
+     * channel.on('msg',(message) => {
+     *  console.log("received msg",message)
      * })
-     * channel.on('msg',(_, __) => {
-     *  console.log("received msg from server")
+     * channel.on('msg',(message) => {
+     *  console.log("received msg from server",message)
      * })
      */
     public on<T extends {}>(event: string, callback: (payload:T) => void) {

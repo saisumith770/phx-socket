@@ -15,7 +15,7 @@ import {e7} from './uuid'
  * This class is what you should import into your app. It has access to all the features of this library.
  * @example 
  * const inst = new Socket("wss://localhost:4000/socket/websocket")
- * inst.on("phx_reply",(_,__) => {
+ * inst.on("phx_reply",(message) => {
  *  console.log("got a new reply")
  * })
  * inst.send({
@@ -94,11 +94,11 @@ export class Socket {
      * @description
      * this method will set an event listener associated to the event. You can also set multiple callbacks to the same event.
      * @example
-     * inst.on('msg',(_, __) => {
-     *  console.log("received msg")
+     * inst.on('msg',(message) => {
+     *  console.log("received msg", message)
      * })
-     * inst.on('msg',(_, __) => {
-     *  console.log("received msg from server")
+     * inst.on('msg',(message) => {
+     *  console.log("received msg from server", message)
      * })
      */
     public on<T extends {}>(event: SocketEvent | string, callback:(payload:MessageType<T> | SocketEvent) => void ) {

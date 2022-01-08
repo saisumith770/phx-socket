@@ -3,6 +3,10 @@ import {
     MessageType,
 } from './internal'
 
+function isMessageType<T>(value:any): value is MessageType<T>{
+    return value.hasOwnProperty('topic') && value.hasOwnProperty('payload')
+}
+
 /**
  * @description 
  * simple abrstraction on top of sockets for channels
@@ -22,7 +26,7 @@ import {
         public topic:string,
         private _socket: Socket,
     ){
-
+        
     }
 
     /**
@@ -61,13 +65,14 @@ import {
      *  console.log("received msg from server")
      * })
      */
-    public on(event: string, callback: (socket: WebSocket, event: MessageEvent) => void) {
+    public on<T extends {}>(event: string, callback: (payload:T) => void) {
         const topic_name = this.topic
         if(!this.events.find(ev => ev === event)) this.events.push(event)
         
-        this._socket.on(event,(socket,ev) => {
-            const parsed = (JSON.parse((ev as MessageEvent).data))
-            if (parsed.topic === topic_name){callback(socket, (ev as MessageEvent))}
+        this._socket.on(event,(data) => {
+            if (isMessageType<T>(data) && data.topic === topic_name){
+                callback(data.payload)
+            }
         })
     }
     
@@ -82,8 +87,8 @@ import {
      * @example
      * channel.off('msg')
      */
-    public off(event:string, callback?: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void){
-        if(callback) this._socket.off(event,callback)
+    public off<T extends {}>(event:string, callback?: (payload:T) => void ){
+        if(callback) this._socket.off(event,callback as any)
         else this._socket.off(event)
     }
 }

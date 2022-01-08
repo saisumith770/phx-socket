@@ -4,7 +4,7 @@ import {
     EventCollection,
     MessageType,
     SocketEvent,
-    SocketState
+    SocketState,
 } from './internal'
 
 import {e7} from './uuid'
@@ -38,13 +38,14 @@ export class Socket {
     constructor(url: string) {
         this._socket = new WebSocket(url)
         this._socket_id = "socket:" + e7()
-        this.on(SocketEvent.OPEN, (_,__) => {
+        this.on(SocketEvent.OPEN, (_) => {
             this._ready = true
             this._pending_messages.forEach((message) => {
                 this.send(message)
             })
             this._pending_messages = []
         })
+
     }
 
     /**
@@ -100,23 +101,24 @@ export class Socket {
      *  console.log("received msg from server")
      * })
      */
-    public on(event: SocketEvent | string, callback: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void) {
-        this._events.addEventToListen(event,callback)
+    public on<T extends {}>(event: SocketEvent | string, callback:(payload:MessageType<T> | SocketEvent) => void ) {
+        this._events.addEventToListen(event,callback as any)
         const eventsToListen = this._events.eventsArray
         switch (event) {
             case SocketEvent.OPEN: 
-                this._socket.onopen = function (this: WebSocket, ev: Event) { callback(this, ev) } 
+                this._socket.onopen = function (this: WebSocket, _: Event) { callback(SocketEvent.OPEN) } 
                 break;
             case SocketEvent.CLOSE: 
-                this._socket.onclose = function (this: WebSocket, ev: CloseEvent) { callback(this, ev) } 
+                this._socket.onclose = function (this: WebSocket, _: CloseEvent) { callback(SocketEvent.CLOSE) } 
                 break;
             case SocketEvent.ERROR: 
-                this._socket.onerror = function (this: WebSocket, ev: Event) { callback(this, ev) } 
+                this._socket.onerror = function (this: WebSocket, _: Event) { callback(SocketEvent.ERROR) } 
                 break;
             default: this._socket.onmessage = function (this: WebSocket, ev: MessageEvent) {
-                const parsedEvent = (JSON.parse(ev.data)).event
+                const parsedJson = JSON.parse(ev.data)
+                const parsedEvent = parsedJson.event
                 eventsToListen.forEach(element => {
-                    if(element.event === parsedEvent) {element.callback(this,ev)}
+                    if(element.event === parsedEvent) {element.callback(parsedJson)}
                 })
             }
         }
@@ -133,8 +135,8 @@ export class Socket {
      * @example
      * inst.off('msg')
      */
-    public off(event:SocketEvent | string, callback?: (socket: WebSocket, event: MessageEvent | CloseEvent | Event) => void){
-        if(callback) this._events.removeEvent(event,callback)
+    public off(event:SocketEvent | string, callback?: <T extends {}>(payload:MessageType<T> | SocketEvent) => void ){
+        if(callback) this._events.removeEvent(event,callback as any)
         else this._events.removeEvent(event)
     }
 

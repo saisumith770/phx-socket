@@ -2,7 +2,7 @@ export  {
     BaseEvents,
     MessageType,
     SocketEvent,
-    SocketState
+    SocketState,
 } from './__types__'
 
 export {

@@ -3,6 +3,8 @@ import {
     MessageType,
 } from './internal'
 
+import {CustomEventArray} from './utils'
+
 function isMessageType<T>(value:any): value is MessageType<T>{
     return value.hasOwnProperty('topic') && value.hasOwnProperty('payload')
 }
@@ -20,13 +22,15 @@ function isMessageType<T>(value:any): value is MessageType<T>{
  * })
  */
  export class Channel{
-    public events: string[] = []
+    public events: string[];
 
     constructor(
         public topic:string,
         private _socket: Socket,
     ){
-        
+        this.events = new CustomEventArray((element:string) => {
+            this._socket.off(element)
+        })
     }
 
     /**

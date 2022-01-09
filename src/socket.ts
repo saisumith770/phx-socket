@@ -6,6 +6,7 @@ import {
     SocketEvent,
     SocketState,
 } from './internal'
+import {CustomEventArray} from './utils'
 
 import {e7} from './uuid'
 
@@ -195,7 +196,7 @@ export class Socket {
         }
     }
 
-    public get events():{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}[] {
+    public get events():CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}[]> {
         return this._events.eventsArray
     }
 

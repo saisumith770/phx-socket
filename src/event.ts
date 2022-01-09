@@ -1,9 +1,12 @@
 import {
     SocketEvent
 } from './internal'
+import {CustomEventArray} from './utils'
+
+type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>
 
 export class EventCollection{
-    public eventsArray: {event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}[] = []
+    public eventsArray: EventArrayType = new CustomEventArray(() => {})
 
     public addEventToListen(event: SocketEvent | string, callback:<T extends {}>(payload:T | SocketEvent) => void){
         if(!this.eventsArray.find(element => element.event === event && element.callback === callback)){ //possiblity of multiple events with differnt callbacks
@@ -15,7 +18,11 @@ export class EventCollection{
     }
 
     public removeEvent(event: SocketEvent | string, callback?:<T extends {}>(payload:T | SocketEvent) => void){
-        if(callback) this.eventsArray = this.eventsArray.filter(element => element.event !== event && element.callback !== callback)
-        this.eventsArray = this.eventsArray.filter(element => element.event !== event) // remove all events with the same name
+        if(callback) this.eventsArray = this.eventsArray.filter(element => 
+            element.event !== event && element.callback !== callback
+        ) as EventArrayType
+        this.eventsArray = this.eventsArray.filter(element => 
+            element.event !== event
+        ) as EventArrayType// remove all events with the same name
     }
 }

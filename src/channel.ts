@@ -1,9 +1,8 @@
 import {
     Socket,
     MessageType,
+    CustomEventArray
 } from './internal'
-
-import {CustomEventArray} from './utils'
 
 function isMessageType<T>(value:any): value is MessageType<T>{
     return value.hasOwnProperty('topic') && value.hasOwnProperty('payload')

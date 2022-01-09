@@ -5,8 +5,8 @@ import {
     MessageType,
     SocketEvent,
     SocketState,
+    CustomEventArray
 } from './internal'
-import {CustomEventArray} from './utils'
 
 import {e7} from './uuid'
 

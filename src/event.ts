@@ -1,7 +1,7 @@
 import {
-    SocketEvent
+    SocketEvent,
+    CustomEventArray
 } from './internal'
-import {CustomEventArray} from './utils'
 
 type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>
 

@@ -16,3 +16,7 @@ export {
 export {
     Socket
 } from './socket'
+
+export {
+    CustomEventArray
+} from './utils'

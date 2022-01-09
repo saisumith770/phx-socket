@@ -200,6 +200,13 @@ export class Socket {
         return this._events.eventsArray
     }
 
+    public reset(){
+        this.events.clear()
+        this.topics.forEach(channel => {
+            this.unsubscribe(channel.topic)
+        })
+    }
+
     /**
      * @description
      * this method will close the socket connection.

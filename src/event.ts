@@ -6,7 +6,7 @@ import {CustomEventArray} from './utils'
 type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>
 
 export class EventCollection{
-    public eventsArray: EventArrayType = new CustomEventArray(() => {})
+    public eventsArray: EventArrayType = new CustomEventArray()
 
     public addEventToListen(event: SocketEvent | string, callback:<T extends {}>(payload:T | SocketEvent) => void){
         if(!this.eventsArray.find(element => element.event === event && element.callback === callback)){ //possiblity of multiple events with differnt callbacks

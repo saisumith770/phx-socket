@@ -44,6 +44,7 @@ export class Socket {
                 this.send(message)
             })
             this._pending_messages = []
+            this.off(SocketEvent.OPEN)
         })
 
     }
@@ -138,6 +139,15 @@ export class Socket {
     public off(event:SocketEvent | string, callback?: <T extends {}>(payload:MessageType<T> | SocketEvent) => void ){
         if(callback) this._events.removeEvent(event,callback as any)
         else this._events.removeEvent(event)
+
+        const eventsToListen = this._events.eventsArray
+        this._socket.onmessage = function (this: WebSocket, ev: MessageEvent) {
+            const parsedJson = JSON.parse(ev.data)
+            const parsedEvent = parsedJson.event
+            eventsToListen.forEach(element => {
+                if(element.event === parsedEvent) {element.callback(parsedJson)}
+            })
+        }
     }
 
     /**
@@ -183,6 +193,10 @@ export class Socket {
             case this._socket.OPEN: return SocketState.OPEN
             default: return SocketState.UNKNOWN
         }
+    }
+
+    public get events():{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}[] {
+        return this._events.eventsArray
     }
 
     /**

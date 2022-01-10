@@ -1,7 +1,8 @@
 import {
     Socket,
     MessageType,
-    CustomEventArray
+    CustomEventArray,
+    SocketEvent
 } from './internal'
 
 function isMessageType<T>(value:any): value is MessageType<T>{
@@ -21,7 +22,7 @@ function isMessageType<T>(value:any): value is MessageType<T>{
  * })
  */
  export class Channel{
-    public events: string[];
+    public events: CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>;
 
     constructor(
         public topic:string,

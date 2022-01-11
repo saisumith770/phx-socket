@@ -47,7 +47,6 @@ export class Socket {
             this._pending_messages = []
             this.off(SocketEvent.OPEN)
         })
-
     }
 
     /**

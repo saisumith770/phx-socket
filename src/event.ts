@@ -1,9 +1,8 @@
 import {
     SocketEvent,
-    CustomEventArray
+    CustomEventArray,
+    EventArrayType
 } from './internal'
-
-type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>
 
 export class EventCollection{
     public eventsArray: EventArrayType = new CustomEventArray()

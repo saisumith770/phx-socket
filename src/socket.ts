@@ -1,3 +1,4 @@
+import { EventArrayType } from '.'
 import {
     BaseEvents,
     Channel,
@@ -5,7 +6,6 @@ import {
     MessageType,
     SocketEvent,
     SocketState,
-    CustomEventArray
 } from './internal'
 
 import {e7} from './uuid'
@@ -86,7 +86,7 @@ export class Socket {
             event: BaseEvents.LEAVE,
             payload: {}
         })
-        if (topic in this.topics) this.topics = this.topics.filter(ch => ch.topic !== topic)
+        if (this.topics.find(element => element.topic == topic)) this.topics = this.topics.filter(ch => ch.topic !== topic)
     }
 
     /**
@@ -196,7 +196,7 @@ export class Socket {
         }
     }
 
-    public get events():CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}[]> {
+    public get events():EventArrayType {
         return this._events.eventsArray
     }
 

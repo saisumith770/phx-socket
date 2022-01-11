@@ -1,6 +1,6 @@
-export class CustomEventArray<T> extends Array{
+export class CustomEventArray<T> extends Array<T>{
     constructor(public callback?:Function,...args:T[]){
-        super(...args as any)
+        super(...args as T[])
     }
     
     public clear(){

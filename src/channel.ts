@@ -47,8 +47,6 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      * })
      */
     public send<PayloadType extends {}>(message: Omit<MessageType<PayloadType>,"topic">) {
-        if(!this.events.find(event => event === message.event)) this.events.push(message.event)
-
         this._socket.send({
             ...message,
             topic: this.topic
@@ -71,7 +69,7 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      */
     public on<T extends {}>(event: string, callback: (payload:T) => void) {
         const topic_name = this.topic
-        if(!this.events.find(ev => ev === event)) this.events.push(event)
+        // if(!this.events.find(ev => ev.event === event)) this.events.push(event)
         
         this._socket.on(event,(data) => {
             if (isMessageType<T>(data) && data.topic === topic_name){

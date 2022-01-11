@@ -3,6 +3,7 @@ export  {
     MessageType,
     SocketEvent,
     SocketState,
+    EventArrayType
 } from './__types__'
 
 export {

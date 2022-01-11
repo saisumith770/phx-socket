@@ -1,3 +1,5 @@
+import { CustomEventArray } from "./utils"
+
 export enum SocketState {
     CLOSED,
     CLOSING,
@@ -25,3 +27,5 @@ export type MessageType<T> = {
     event: string,
     payload: T
 }
+
+export type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>

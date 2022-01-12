@@ -69,7 +69,7 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      */
     public on<T extends {}>(event: string, callback: (payload:T) => void) {
         const topic_name = this.topic
-        // if(!this.events.find(ev => ev.event === event)) this.events.push(event)
+        if(!this.events.find(ev => ev.event === event && ev.callback === callback)) this.events.push({event,callback: callback as <T extends {}>(payload: SocketEvent | T) => void})
         
         this._socket.on(event,(data) => {
             if (isMessageType<T>(data) && data.topic === topic_name){
@@ -92,5 +92,11 @@ function isMessageType<T>(value:any): value is MessageType<T>{
     public off<T extends {}>(event:string, callback?: (payload:T) => void ){
         if(callback) this._socket.off(event,callback as any)
         else this._socket.off(event)
+
+        this.events = this.events.filter(ev => ev.event !== event && ev.callback !== callback) as CustomEventArray<{
+            event: string | SocketEvent;
+            callback: <T extends {}>(payload: SocketEvent | T) => void;
+        }>
+        
     }
 }

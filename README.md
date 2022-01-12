@@ -7,7 +7,7 @@ The regular features like connecting the socket, sending messages ,checking stat
 # Our Concept
 The way I want to solve this issue is setup events and then allow channels and callbacks to subscribe to them. So that when an event takes place all the callbacks to that event fire and when an event is turned off all callbacks and channels can unsubscribe. The best part of this model is that everything is broken into small units so that if you want to unsubscribe only one callback then you can do so without affecting the others. 
 # Progress
-I am still trying to build the basic features of the library so haven't got the chance to implement this feature yet. But I assure you this feature will be built ASAP!
+I've built the rough implementation but have to test it and check whether it works?
 
 ## Installation
 ```bash

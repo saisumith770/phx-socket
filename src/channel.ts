@@ -1,3 +1,4 @@
+import { EventArrayType } from '.';
 import {
     Socket,
     MessageType,
@@ -22,7 +23,7 @@ function isMessageType<T>(value:any): value is MessageType<T>{
  * })
  */
  export class Channel{
-    public events: CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>;
+    public events: EventArrayType;
 
     constructor(
         public topic:string,
@@ -69,13 +70,17 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      */
     public on<T extends {}>(event: string, callback: (payload:T) => void) {
         const topic_name = this.topic
-        if(!this.events.find(ev => ev.event === event && ev.callback === callback)) this.events.push({event,callback: callback as <T extends {}>(payload: SocketEvent | T) => void})
+        if(!this.events.find(ev => ev.event === event && ev.callback === callback)) this.events.push({
+            event,
+            callback: callback as <T extends {}>(payload: SocketEvent | T) => void,
+            topic:this.topic
+        })
         
         this._socket.on(event,(data) => {
             if (isMessageType<T>(data) && data.topic === topic_name){
                 callback(data.payload)
             }
-        })
+        },this.topic)
     }
     
     /**
@@ -90,13 +95,9 @@ function isMessageType<T>(value:any): value is MessageType<T>{
      * channel.off('msg')
      */
     public off<T extends {}>(event:string, callback?: (payload:T) => void ){
-        if(callback) this._socket.off(event,callback as any)
-        else this._socket.off(event)
+        if(callback) this._socket.off(event,callback as any,this.topic)
+        else this._socket.off(event,undefined,this.topic)
 
-        this.events = this.events.filter(ev => ev.event !== event && ev.callback !== callback) as CustomEventArray<{
-            event: string | SocketEvent;
-            callback: <T extends {}>(payload: SocketEvent | T) => void;
-        }>
-        
+        this.events = this.events.filter(ev => ev.event !== event && ev.callback !== callback) as EventArrayType    
     }
 }

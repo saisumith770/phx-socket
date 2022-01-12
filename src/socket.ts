@@ -102,9 +102,8 @@ export class Socket {
      *  console.log("received msg from server", message)
      * })
      */
-    public on<T extends {}>(event: SocketEvent | string, callback:(payload:MessageType<T> | SocketEvent) => void ) {
-        this._events.addEventToListen(event,callback as any)
-        const eventsToListen = this._events.eventsArray
+    public on<T extends {}>(event: SocketEvent | string, callback:(payload:MessageType<T> | SocketEvent) => void, topic:string = "_global" ) {
+        this._events.addEventToListen(event,callback as any,topic)
         switch (event) {
             case SocketEvent.OPEN: 
                 this._socket.onopen = function (this: WebSocket, _: Event) { callback(SocketEvent.OPEN) } 
@@ -115,13 +114,7 @@ export class Socket {
             case SocketEvent.ERROR: 
                 this._socket.onerror = function (this: WebSocket, _: Event) { callback(SocketEvent.ERROR) } 
                 break;
-            default: this._socket.onmessage = function (this: WebSocket, ev: MessageEvent) {
-                const parsedJson = JSON.parse(ev.data)
-                const parsedEvent = parsedJson.event
-                eventsToListen.forEach(element => {
-                    if(element.event === parsedEvent) {element.callback(parsedJson)}
-                })
-            }
+            default: this._socket_onmessage_handler()
         }
     }
 
@@ -136,10 +129,13 @@ export class Socket {
      * @example
      * inst.off('msg')
      */
-    public off(event:SocketEvent | string, callback?: <T extends {}>(payload:MessageType<T> | SocketEvent) => void ){
-        if(callback) this._events.removeEvent(event,callback as any)
-        else this._events.removeEvent(event)
-
+    public off(event:SocketEvent | string, callback?: <T extends {}>(payload:MessageType<T> | SocketEvent) => void,topic:string="_global"){
+        if(callback) this._events.removeEvent(event,topic,callback as any)
+        else this._events.removeEvent(event,topic)
+        this._socket_onmessage_handler()
+    }
+    
+    private _socket_onmessage_handler(){
         const eventsToListen = this._events.eventsArray
         this._socket.onmessage = function (this: WebSocket, ev: MessageEvent) {
             const parsedJson = JSON.parse(ev.data)

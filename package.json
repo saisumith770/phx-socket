@@ -1,6 +1,6 @@
 {
   "name": "phx-socket",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "a type safe library to communicate to the websocket built with elixir phoenix.",
   "main": "dist/index.js",
   "repository": "https://github.com/saisumith770/phx-socket",

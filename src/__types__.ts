@@ -28,4 +28,8 @@ export type MessageType<T> = {
     payload: T
 }
 
-export type EventArrayType = CustomEventArray<{event:SocketEvent|string, callback:<T extends {}>(payload:T | SocketEvent) => void}>
+export type EventArrayType = CustomEventArray<{
+    event:SocketEvent|string, 
+    callback:<T extends {}>(payload:T | SocketEvent) => void,
+    topic:string
+}>
